@@ -105,6 +105,7 @@ xtwone3four
 zoneight234
 7pqrstsixteen"#;
 
+#[cfg(test)]
 mod tests {
 
     use super::*;
