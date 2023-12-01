@@ -1,0 +1,4 @@
+[toolchain]
+# For stable: 
+# channel = "stable"
+channel = "nightly"

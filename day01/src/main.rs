@@ -1,28 +1,28 @@
+#![feature(lazy_cell)]
+
 pub mod data;
 
 use crate::data::*;
 
 fn answer_part1(data: Vec<Parsed>) -> i64 {
-
-    data
-    .into_iter()
-    .map(|item| item.0 * 10 + item.1)
-    .sum()
-
+    data.into_iter().map(|item| item.0 * 10 + item.1).sum()
 }
 
 fn answer_part2(data: Vec<Parsed2>) -> i64 {
-    data
-    .into_iter()
-    .map(|item| item.0 * 10 + item.1)
-    .sum()
+    data.into_iter().map(|item| item.0 * 10 + item.1).sum()
 }
 
 fn main() {
-    let input_data = import_data(include_str!("../input.txt"));
+    let raw_data = include_str!("../input.txt");
 
-    println!("Answer of part 1 is: {}", answer_part1(input_data.clone()));
-    println!("Answer of part 2 is: {}", answer_part2(import_data_2(include_str!("../input.txt"))));
+    println!(
+        "Answer of part 1 is: {}",
+        answer_part1(import_data(raw_data))
+    );
+    println!(
+        "Answer of part 2 is: {}",
+        answer_part2(import_data_2(raw_data))
+    );
 }
 
 #[cfg(test)]
@@ -44,7 +44,5 @@ mod tests {
     }
 
     #[test]
-    fn playground() {
-        
-    }
+    fn playground() {}
 }
