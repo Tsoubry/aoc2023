@@ -1,7 +1,7 @@
 [workspace]
 resolver = "2"
 
-members = ["day*"]
+members = ["day*", "no-std-day*"]
 
 [workspace.lints.rust]
 dead_code = "allow"
