@@ -1,14 +1,5 @@
-pub mod data;
+use {{crate_name}}::*;
 
-use crate::data::*;
-
-// fn answer_part1(data: Vec<Parsed>) -> AnswerDtype {
-//     todo!()
-// }
-
-// fn answer_part2(data: Vec<Parsed>) -> AnswerDtype {
-//     todo!()
-// }
 
 fn main() {
     let input_data = import_data(include_str!("../input.txt"));
@@ -21,7 +12,6 @@ fn main() {
 mod tests {
 
     use super::*;
-    use crate::data::{TEST_ANSWER_1, TEST_ANSWER_2, TEST_DATA_1, TEST_DATA_2};
 
     // #[test]
     // fn test_answer1() {

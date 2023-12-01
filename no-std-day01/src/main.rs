@@ -1,5 +1,3 @@
-extern crate no_std_day01;
-
 use no_std_day01::{answer_part1, answer_part2, parse_data, parse_data_2};
 
 fn main() {

@@ -17,7 +17,6 @@ fn main() {
 mod tests {
 
     use super::*;
-    use crate::data::TEST_DATA;
 
     #[test]
     fn test_answer1() {
