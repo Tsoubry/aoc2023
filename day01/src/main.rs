@@ -1,16 +1,4 @@
-#![feature(lazy_cell)]
-
-pub mod data;
-
-use crate::data::*;
-
-fn answer_part1(data: Vec<Parsed>) -> i64 {
-    data.into_iter().map(|item| item.0 * 10 + item.1).sum()
-}
-
-fn answer_part2(data: Vec<Parsed2>) -> i64 {
-    data.into_iter().map(|item| item.0 * 10 + item.1).sum()
-}
+use day01::*;
 
 fn main() {
     let raw_data = include_str!("../input.txt");
