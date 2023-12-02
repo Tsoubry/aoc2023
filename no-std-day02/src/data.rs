@@ -1,10 +1,19 @@
+use core::str::FromStr;
+
+use nom::{
+    bytes::complete::tag,
+    character::complete::{digit1, space1},
+    combinator::map_res,
+    sequence::tuple,
+    IResult,
+};
 use strum_macros::EnumString;
 
 pub type AnswerDtype = i64;
 
 #[allow(non_camel_case_types)]
 #[derive(Debug, PartialEq, EnumString)]
-enum Cube {
+enum Color {
     blue,
     red,
     green,
@@ -35,12 +44,11 @@ pub struct Game {
 
 impl Default for Game {
     fn default() -> Self {
-        Self { number: 0, sets: [Set::default(); 10] }
+        Self {
+            number: 0,
+            sets: [Set::default(); 10],
+        }
     }
-}
-
-fn parse_number(input: &str) -> Option<i64> {
-    input.parse::<i64>().ok()
 }
 
 pub fn parse_data(data: &str) -> [Game; 100] {
@@ -54,49 +62,58 @@ pub fn parse_data(data: &str) -> [Game; 100] {
     parsed_data
 }
 
-fn cube_finder(input: &str) -> (Cube, i64) {
-    let mut cube_split = input.split(" ");
-    let cb_num = cube_split.next().expect("cube number");
-    let amount = parse_number(cb_num).expect("cube digit");
-    let color = cube_split
-        .next()
-        .expect("cube color")
-        .parse::<Cube>()
-        .expect("parsed cube color");
-    (color, amount)
+fn parse_color(input: &str) -> IResult<&str, Color> {
+    map_res(
+        nom::branch::alt((tag("green"), tag("blue"), tag("red"))),
+        Color::from_str,
+    )(input)
 }
 
-fn set_parser(set_str: &str) -> Set {
+fn parse_number(input: &str) -> IResult<&str, i64> {
+    map_res(digit1, |s: &str| s.parse::<i64>())(input)
+}
+
+fn parse_cube(input: &str) -> IResult<&str, (i64, Color)> {
+    let (input_, (num, _, color)) = tuple((parse_number, space1, parse_color))(input)?;
+
+    Ok((input_, (num, color)))
+}
+
+fn parse_set(input: &str) -> IResult<&str, Set> {
     let mut set = Set::default();
 
-    set_str
+    let parsed_cubes = input
         .split(", ")
-        .map(|cube_str| cube_finder(cube_str))
-        .for_each(|cube| match cube {
-            (Cube::blue, amount) => set.blue = amount,
-            (Cube::red, amount) => set.red = amount,
-            (Cube::green, amount) => set.green = amount,
+        .map(|cube_str| parse_cube(cube_str).expect("can't parse cube"));
+
+    for (_, (amount, color)) in parsed_cubes {
+        match color {
+            Color::blue => set.blue = amount,
+            Color::red => set.red = amount,
+            Color::green => set.green = amount,
+        }
+    }
+
+    Ok((input, set))
+}
+
+fn parse_set_entry(input: &str) -> IResult<&str, [Set; 10]> {
+    let mut sets: [Set; 10] = [Default::default(); 10];
+
+    input
+        .split("; ")
+        .map(|set_str| parse_set(set_str).expect("can't parse sets"))
+        .enumerate()
+        .for_each(|(idx, (_, set))| {
+            sets[idx] = set;
         });
 
-    set
+    Ok((input, sets))
 }
 
 pub fn parse(line: &str) -> Game {
-    let mut game_split = line.split(": ");
-    let game_str = game_split.next().expect("game split first");
-
-    let game_str_split = game_str.split(" ");
-
-    let game_number =
-        parse_number(game_str_split.last().expect("game number last")).expect("game number parsed");
-
-    let set_split = game_split.next().expect("set string").split("; ");
-
-    let mut sets: [Set; 10] = [Default::default(); 10];
-
-    for (idx, set) in set_split.enumerate() {
-        sets[idx] = set_parser(set);
-    }
+    let (_, (_, game_number, _, sets)) =
+        tuple((tag("Game "), parse_number, tag(": "), parse_set_entry))(line).unwrap();
 
     Game {
         number: game_number,
