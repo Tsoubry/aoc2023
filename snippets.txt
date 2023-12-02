@@ -13,3 +13,9 @@ use std::str::FromStr;
 use regex::Regex;
 let re = Regex::new(r"^\$?\s?(ls|cd|dir)\s?(.*)").unwrap();
  re.captures(&line) 
+
+
+crates:
+
+pathfinding = "4.0.0"
+ndarray = "0.15.6"
