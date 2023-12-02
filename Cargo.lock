@@ -22,8 +22,10 @@ name = "benchmarks"
 version = "0.1.0"
 dependencies = [
  "day01",
+ "day02",
  "divan",
  "no-std-day01",
+ "no-std-day02",
 ]
 
 [[package]]
@@ -148,6 +150,15 @@ name = "no-std-day01"
 version = "0.1.0"
 dependencies = [
  "regex",
+]
+
+[[package]]
+name = "no-std-day02"
+version = "0.1.0"
+dependencies = [
+ "nom",
+ "strum",
+ "strum_macros",
 ]
 
 [[package]]
