@@ -75,10 +75,7 @@ fn find_number_gear(data: &Vec<&str>, y: usize, pos: usize) -> Option<AnswerDtyp
 
     for line in &data[start_y..end_y] {
         for num_match in re_number.find_iter(line) {
-            // println!("{:?}", num_match.as_str());
-
             if ranges_overlap(num_match.range(), start_x..end_x) {
-                // println!("{:?}", num_match.as_str());
                 parts_found.push(
                     num_match
                         .as_str()
