@@ -11,7 +11,7 @@ pub struct Pos {
     pub y: usize,
 }
 
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub enum Item {
     Symbol,
     Gear,
@@ -86,6 +86,34 @@ impl<const X: usize, const Y: usize> Grid<X, Y> {
             });
 
         self.grid[y] = array;
+    }
+
+    fn assign_item(grid: &[[Item; X]; Y], x: Option<usize>, y: Option<usize>) -> Item {
+        if x == None || y == None {
+            Item::Nothing
+        } else {
+            grid.get(y.unwrap())
+                .copied()
+                .map(|row| row.get(x.unwrap()).copied())
+                .flatten()
+                .unwrap_or(Item::Nothing)
+        }
+    }
+
+    pub fn neighbours(&self, x: usize, y: usize) -> [Item; 8] {
+        let bounded_x = x.checked_sub(1);
+        let bounded_y = y.checked_sub(1);
+
+        [
+            Self::assign_item(&self.grid, bounded_x, bounded_y),
+            Self::assign_item(&self.grid, Some(x), bounded_y),
+            Self::assign_item(&self.grid, Some(x + 1), bounded_y),
+            Self::assign_item(&self.grid, Some(x + 1), Some(y)),
+            Self::assign_item(&self.grid, Some(x + 1), Some(y + 1)),
+            Self::assign_item(&self.grid, Some(x), Some(y + 1)),
+            Self::assign_item(&self.grid, bounded_x, Some(y + 1)),
+            Self::assign_item(&self.grid, bounded_x, Some(y)),
+        ]
     }
 }
 
