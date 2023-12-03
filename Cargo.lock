@@ -23,9 +23,11 @@ version = "0.1.0"
 dependencies = [
  "day01",
  "day02",
+ "day03",
  "divan",
  "no-std-day01",
  "no-std-day02",
+ "no-std-day03",
 ]
 
 [[package]]

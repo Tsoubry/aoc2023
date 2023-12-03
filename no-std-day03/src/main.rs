@@ -20,14 +20,15 @@ mod tests {
     #[test]
     fn test_parsing() {
         let input_data: Grid<10, 10> = Grid::parse_data(TEST_DATA_1);
-        println!("{:?}", input_data);
+        // println!("{:?}", input_data);
+        println!("{:?}", input_data.number_list.iter().flatten().collect::<Vec<_>>());
     }
 
-    // #[test]
-    // fn test_answer1() {
-    //     let input_data = parse_data(TEST_DATA_1);
-    //     assert_eq!(TEST_ANSWER_1, answer_part1(input_data));
-    // }
+    #[test]
+    fn test_answer1() {
+        let input_data: Grid<10, 10> = Grid::parse_data(TEST_DATA_1);
+        assert_eq!(TEST_ANSWER_1, answer_part1(&input_data));
+    }
 
     // #[test]
     // fn test_parsing2() {

@@ -9,24 +9,28 @@ pub use crate::grid::*;
 pub fn answer_part1<const X: usize, const Y: usize>(grid: &Grid<X, Y>) -> AnswerDtype {
     let mut total: AnswerDtype = 0;
 
-    for line in grid.grid {}
+    for num in grid.number_list {
+        if num.is_none() {
+            break;
+        }
 
-    // for y in 0..data.len() {
-    //     let y_str = &data[y];
+        if let Some((pos, value)) = num {
+            let start_x = pos.x_start.saturating_sub(1);
+            let end_x = core::cmp::min(pos.x_end + 1, X);
 
-    //     for num_match in re_number.find_iter(y_str) {
-    //         let number = num_match
-    //             .as_str()
-    //             .parse::<AnswerDtype>()
-    //             .expect("can't parse number");
-    //         let start = num_match.start();
-    //         let end = num_match.end();
+            let start_y = pos.y.saturating_sub(1);
+            let end_y = core::cmp::min(pos.y + 2, Y );
 
-    //         if check_neighbour_char(&data, y, start, end) {
-    //             total += number;
-    //         }
-    //     }
-    // }
+            for x in start_x..end_x {
+                for y in start_y..end_y {
+                    let item = grid.grid[y][x];
+                    if item == Item::Gear || item == Item::Symbol {
+                        total += value as u32;
+                    }
+                }
+            }
+        };
+    }
 
     total
 }

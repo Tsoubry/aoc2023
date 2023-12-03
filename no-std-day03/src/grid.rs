@@ -11,7 +11,7 @@ pub struct Pos {
     pub y: usize,
 }
 
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub enum Item {
     Symbol,
     Gear,
@@ -57,7 +57,7 @@ impl<const X: usize, const Y: usize> Grid<X, Y> {
             let start = number_str.start();
             let end = number_str.end();
 
-            for pos in start..=end {
+            for pos in start..end {
                 array[pos] = number;
             }
 

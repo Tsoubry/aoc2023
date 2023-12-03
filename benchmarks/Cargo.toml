@@ -9,6 +9,8 @@ day01 = { path = "../day01" }
 no-std-day01 = { path = "../no-std-day01" }
 day02 = { path = "../day02" }
 no-std-day02 = { path = "../no-std-day02" }
+day03 = { path = "../day03" }
+no-std-day03 = { path = "../no-std-day03" }
 
 [[bench]]
 name = "day01"
@@ -18,4 +20,9 @@ harness = false
 [[bench]]
 name = "day02"
 path = "benches/day02.rs"
+harness = false
+
+[[bench]]
+name = "day03"
+path = "benches/day03.rs"
 harness = false
