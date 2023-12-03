@@ -17,7 +17,7 @@ pub const TEST_DATA_1: &str = r#"467..114..
 pub const TEST_ANSWER_1: AnswerDtype = 4361;
 
 pub const TEST_DATA_2: &str = TEST_DATA_1;
-pub const TEST_ANSWER_2: AnswerDtype = 0;
+pub const TEST_ANSWER_2: AnswerDtype = 467835;
 
 #[cfg(test)]
 mod tests {

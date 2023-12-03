@@ -6,7 +6,7 @@ fn main() {
     // input_data.iter().for_each(|s| println!("{}", s));
 
     println!("Answer of part 1 is: {}", answer_part1(input_data.clone()));
-    // println!("Answer of part 2 is: {}", answer_part2(input_data));
+    println!("Answer of part 2 is: {}", answer_part2(input_data));
 }
 
 #[cfg(test)]
@@ -20,11 +20,11 @@ mod tests {
         assert_eq!(TEST_ANSWER_1, answer_part1(input_data));
     }
 
-    // #[test]
-    // fn test_answer2() {
-    //     let input_data = import_data(TEST_DATA_2);
-    //     assert_eq!(TEST_ANSWER_2, answer_part2(input_data));
-    // }
+    #[test]
+    fn test_answer2() {
+        let input_data = import_data(TEST_DATA_2);
+        assert_eq!(TEST_ANSWER_2, answer_part2(input_data));
+    }
 
     #[test]
     fn playground() {
