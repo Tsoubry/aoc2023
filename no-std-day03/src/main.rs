@@ -16,7 +16,7 @@ mod tests {
 
     #[test]
     fn test_parsing() {
-        let input_data: Grid<10, 10> = Grid::parse_data(TEST_DATA_1);
+        let _input_data: Grid<10, 10> = Grid::parse_data(TEST_DATA_1);
         // println!("{:?}", input_data);
         // println!(
         //     "{:?}",
