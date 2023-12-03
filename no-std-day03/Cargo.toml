@@ -1,0 +1,13 @@
+[package]
+name = "no-std-day03"
+version = "0.1.0"
+authors = ["Tanguy Soubry"]
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+regex = "1.10.2"
+
+[lints]
+workspace = true
