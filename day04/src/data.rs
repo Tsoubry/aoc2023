@@ -37,7 +37,7 @@ Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11"#;
 pub const TEST_ANSWER_1: AnswerDtype = 13;
 
 pub const TEST_DATA_2: &str = TEST_DATA_1;
-pub const TEST_ANSWER_2: AnswerDtype = 0;
+pub const TEST_ANSWER_2: AnswerDtype = 30;
 
 #[cfg(test)]
 mod tests {
