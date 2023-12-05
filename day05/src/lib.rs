@@ -48,15 +48,23 @@ pub fn answer_part2(data: Parsed) -> AnswerDtype {
         _ => panic!("error chunks"),
     });
 
-    let seeds = seed_pairs.flat_map(|(start, len)| (start..(start + len)).collect::<Vec<_>>());
+    let seeds = seed_pairs.flat_map(|(start, len)| (start..(start + len)).collect::<Vec<_>>()).collect::<Vec<_>>();
+
+    let total_seeds = seeds.len();
 
     seeds
-        .map(|seed| {
+        .into_iter()
+        .enumerate()
+        .map(|(handled, seed)| {
             // println!("seed: {}", seed);
             let mut item = seed;
 
             for map in maps.clone() {
                 item = get_mapped_number_faster(&map, item);
+            }
+
+            if handled % 10000 == 0 {
+                println!("handled: {}%", handled as f64 / total_seeds as f64 * 100f64);
             }
 
             item
