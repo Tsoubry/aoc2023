@@ -5,7 +5,7 @@ fn main() {
     let input_data = import_data(include_str!("../input.txt"));
 
     println!("Answer of part 1 is: {}", answer_part1(input_data.clone()));
-    // println!("Answer of part 2 is: {}", answer_part2(input_data));
+    println!("Answer of part 2 is: {}", answer_part2(input_data));
 }
 
 #[cfg(test)]
