@@ -17,10 +17,6 @@ fn get_mapped_number_faster(maps: &Vec<MapData>, item: AnswerDtype) -> AnswerDty
     item
 }
 
-struct MapData2 {
-    destination_range_start: AnswerDtype,
-}
-
 pub fn answer_part1(data: Parsed) -> AnswerDtype {
     let (seeds, maps) = data;
 
@@ -39,7 +35,6 @@ pub fn answer_part1(data: Parsed) -> AnswerDtype {
         .expect("error getting minimum value")
 }
 
-#[allow(unused_results)]
 pub fn answer_part2(data: Parsed) -> AnswerDtype {
     let (seed_info, maps) = data;
 
@@ -48,7 +43,9 @@ pub fn answer_part2(data: Parsed) -> AnswerDtype {
         _ => panic!("error chunks"),
     });
 
-    let seeds = seed_pairs.flat_map(|(start, len)| (start..(start + len)).collect::<Vec<_>>()).collect::<Vec<_>>();
+    let seeds = seed_pairs
+        .flat_map(|(start, len)| (start..(start + len)).collect::<Vec<_>>())
+        .collect::<Vec<_>>();
 
     let total_seeds = seeds.len();
 
@@ -56,7 +53,6 @@ pub fn answer_part2(data: Parsed) -> AnswerDtype {
         .into_iter()
         .enumerate()
         .map(|(handled, seed)| {
-            // println!("seed: {}", seed);
             let mut item = seed;
 
             for map in maps.clone() {
