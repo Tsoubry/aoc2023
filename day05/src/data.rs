@@ -1,4 +1,4 @@
-pub type AnswerDtype = u64;
+pub type AnswerDtype = u32;
 
 use std::ops::Range;
 
@@ -85,7 +85,7 @@ humidity-to-location map:
 pub const TEST_ANSWER_1: AnswerDtype = 35;
 
 pub const TEST_DATA_2: &str = TEST_DATA_1;
-pub const TEST_ANSWER_2: AnswerDtype = 0;
+pub const TEST_ANSWER_2: AnswerDtype = 46;
 
 #[cfg(test)]
 mod tests {
