@@ -8,41 +8,48 @@ pub struct Race {
     pub distance: AnswerDtype,
 }
 
+fn split_whitespace(s: &str) -> Vec<AnswerDtype> {
+    s.trim_start_matches("Time:")
+        .trim_start_matches("Distance:")
+        .trim_start()
+        .split_whitespace()
+        .map(|s| s.parse().expect("parse into number"))
+        .collect()
+}
+
 pub fn import_data(data: &str) -> Vec<Race> {
-    // data.lines().map(|line| parse(line)).collect()
+    let mut lines = data.lines();
+    let time_line = split_whitespace(lines.next().expect("time line"));
+    let distance_line = split_whitespace(lines.next().expect("distance line"));
 
-    vec![
-        Race::new(60, 475),
-        Race::new(94, 2138),
-        Race::new(78, 1015),
-        Race::new(82, 1650),
-    ]
+    time_line
+        .iter()
+        .zip(distance_line.iter())
+        .map(|(&t, &d)| Race::new(t, d))
+        .collect()
 }
 
-pub fn import_data2(data: &str) -> Vec<Race> {
-    // data.lines().map(|line| parse(line)).collect()
-
-    vec![
-        Race::new(60947882, 475213810151650),
-    ]
+fn make_number(s: &str) -> AnswerDtype {
+    s.trim_start_matches("Time:")
+        .trim_start_matches("Distance:")
+        .replace(" ", "")
+        .parse()
+        .expect("parse into number")
 }
 
-pub fn gen_test_data() -> Vec<Race>{
-    vec![
-    Race::new(7, 9),
-    Race::new(15, 40),
-    Race::new(30, 200),
-]
+pub fn import_data_2(data: &str) -> Vec<Race> {
+    let mut lines = data.lines();
+    let time = make_number(lines.next().expect("time line"));
+    let distance = make_number(lines.next().expect("distance line"));
+
+    vec![Race::new(time, distance)]
 }
 
-pub fn gen_test_data2() -> Vec<Race>{
-    vec![
-    Race::new(71530, 940200),
-]
-}
-
+pub const TEST_DATA_1: &str = r#"Time:      7  15   30
+Distance:  9  40  200"#;
 pub const TEST_ANSWER_1: AnswerDtype = 288;
 
+pub const TEST_DATA_2: &str = TEST_DATA_1;
 pub const TEST_ANSWER_2: AnswerDtype = 71503;
 
 #[cfg(test)]
@@ -52,7 +59,7 @@ mod tests {
 
     #[test]
     fn test_parsing() {
-        // let input_data = import_data(TEST_DATA_1);
-        // println!("{:?}", input_data);
+        let input_data = import_data(TEST_DATA_1);
+        println!("{:?}", input_data);
     }
 }
