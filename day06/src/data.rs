@@ -19,6 +19,14 @@ pub fn import_data(data: &str) -> Vec<Race> {
     ]
 }
 
+pub fn import_data2(data: &str) -> Vec<Race> {
+    // data.lines().map(|line| parse(line)).collect()
+
+    vec![
+        Race::new(60947882, 475213810151650),
+    ]
+}
+
 pub fn gen_test_data() -> Vec<Race>{
     vec![
     Race::new(7, 9),
@@ -27,10 +35,15 @@ pub fn gen_test_data() -> Vec<Race>{
 ]
 }
 
+pub fn gen_test_data2() -> Vec<Race>{
+    vec![
+    Race::new(71530, 940200),
+]
+}
 
 pub const TEST_ANSWER_1: AnswerDtype = 288;
 
-pub const TEST_ANSWER_2: AnswerDtype = 0;
+pub const TEST_ANSWER_2: AnswerDtype = 71503;
 
 #[cfg(test)]
 mod tests {

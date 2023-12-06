@@ -32,6 +32,9 @@ pub fn answer_part1(data: Vec<Race>) -> AnswerDtype {
 
 }
 
-// pub fn answer_part2(data: Vec<Parsed>) -> AnswerDtype {
-//     todo!()
-// }
+pub fn answer_part2(data: Vec<Race>) -> AnswerDtype {
+    data.into_iter().map(
+        |race|find_ways_to_win(race.time, race.distance)
+    ).map(|x| {println!("{}", &x); x})
+    .fold(1, |acc, x| acc * x)
+}
