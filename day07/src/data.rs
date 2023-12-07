@@ -1,8 +1,9 @@
 use std::collections::HashMap;
+use std::cmp::Ordering;
 
 pub type AnswerDtype = u64;
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum HandType {
     FiveOfAKind,
     FourOfAKind,
@@ -13,12 +14,82 @@ pub enum HandType {
     HighCard,
 }
 
+impl HandType {
+
+    fn value(&self) -> u8 {
+        match self {
+            HandType::FiveOfAKind => 6,
+            HandType::FourOfAKind => 5,
+            HandType::FullHouse => 4,
+            HandType::ThreeOfAKind => 3,
+            HandType::TwoPair => 2,
+            HandType::OnePair => 1,
+            HandType::HighCard => 0,
+        }
+    }
+
+}
+
+impl PartialOrd for HandType {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl Ord for HandType {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.value().cmp(&other.value())
+    }
+}
+
+
 #[derive(Clone, Copy, Debug)]
 pub struct Hand {
-    cards: [u8; 5],
-    hand_type: HandType,
-    bid: AnswerDtype,
+    pub cards: [u8; 5],
+    pub hand_type: HandType,
+    pub bid: AnswerDtype,
 }
+
+impl PartialEq for Hand {
+    fn eq(&self, other: &Self) -> bool {
+        self.hand_type == other.hand_type && self.cards == other.cards
+    }
+}
+
+impl Eq for Hand {}
+
+impl Ord for Hand {
+    fn cmp(&self, other: &Self) -> Ordering {
+        // First, compare by hand_type
+        let hand_type_order = self.hand_type.cmp(&other.hand_type);
+        if hand_type_order != Ordering::Equal {
+            return hand_type_order;
+        } else {
+            
+            let zipped = self.cards.iter().zip(other.cards.iter());
+
+            for (this_card, other_card) in zipped {
+                let card_order = this_card.cmp(other_card);
+                if card_order == Ordering::Equal {
+                    continue;
+                } else {
+                    return this_card.cmp(other_card)
+                }
+            }
+
+            return Ordering::Equal
+
+        }
+
+    }
+}
+
+impl PartialOrd for Hand {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
 
 pub fn import_data(data: &str) -> Vec<Hand> {
     data.lines().map(|line| parse(line)).collect()
@@ -121,6 +192,6 @@ mod tests {
     #[test]
     fn test_parsing() {
         let input_data = import_data(TEST_DATA_1);
-        println!("{:?}", input_data);
+        // println!("{:?}", input_data);
     }
 }
