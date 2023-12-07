@@ -1,5 +1,5 @@
-use std::collections::HashMap;
 use std::cmp::Ordering;
+use std::collections::HashMap;
 
 pub type AnswerDtype = u64;
 
@@ -15,7 +15,6 @@ pub enum HandType {
 }
 
 impl HandType {
-
     fn value(&self) -> u8 {
         match self {
             HandType::FiveOfAKind => 6,
@@ -27,7 +26,6 @@ impl HandType {
             HandType::HighCard => 0,
         }
     }
-
 }
 
 impl PartialOrd for HandType {
@@ -41,7 +39,6 @@ impl Ord for HandType {
         self.value().cmp(&other.value())
     }
 }
-
 
 #[derive(Clone, Copy, Debug)]
 pub struct Hand {
@@ -65,7 +62,6 @@ impl Ord for Hand {
         if hand_type_order != Ordering::Equal {
             return hand_type_order;
         } else {
-            
             let zipped = self.cards.iter().zip(other.cards.iter());
 
             for (this_card, other_card) in zipped {
@@ -73,14 +69,12 @@ impl Ord for Hand {
                 if card_order == Ordering::Equal {
                     continue;
                 } else {
-                    return this_card.cmp(other_card)
+                    return this_card.cmp(other_card);
                 }
             }
 
-            return Ordering::Equal
-
+            return Ordering::Equal;
         }
-
     }
 }
 
@@ -89,7 +83,6 @@ impl PartialOrd for Hand {
         Some(self.cmp(other))
     }
 }
-
 
 pub fn import_data(data: &str) -> Vec<Hand> {
     data.lines().map(|line| parse(line)).collect()
@@ -163,13 +156,140 @@ pub fn parse(line: &str) -> Hand {
     let mut splitted = line.split_whitespace();
 
     let cards = splitted.next().expect("getting cards error");
-    let bid = splitted.next().expect("getting bid error").parse::<AnswerDtype>().expect("parse bid error");
+    let bid = splitted
+        .next()
+        .expect("getting bid error")
+        .parse::<AnswerDtype>()
+        .expect("parse bid error");
 
     let value_cards = get_value_cards(cards);
 
     Hand {
         cards: value_cards,
         hand_type: get_hand_type(value_cards),
+        bid: bid,
+    }
+}
+
+pub fn import_data_2(data: &str) -> Vec<Hand2> {
+    data.lines().map(|line| parse2(line)).collect()
+}
+
+fn get_value_cards_alternative(cards: &str) -> [u8; 5] {
+    let mut value_cards = [0u8; 5];
+
+    cards.chars().enumerate().for_each(|(idx, c)| {
+        let card = match c {
+            'J' => 1,
+            '2' => 2,
+            '3' => 3,
+            '4' => 4,
+            '5' => 5,
+            '6' => 6,
+            '7' => 7,
+            '8' => 8,
+            '9' => 9,
+            'T' => 10,
+            'Q' => 11,
+            'K' => 12,
+            'A' => 13,
+            _ => unreachable!(),
+        };
+
+        value_cards[idx] = card;
+    });
+
+    value_cards
+}
+
+#[derive(Clone, Copy, Debug)]
+pub struct Hand2 {
+    pub cards: [u8; 5],
+    pub hand_type: HandType,
+    pub bid: AnswerDtype,
+}
+
+impl PartialEq for Hand2 {
+    fn eq(&self, other: &Self) -> bool {
+        self.hand_type == other.hand_type && self.cards == other.cards
+    }
+}
+
+impl Eq for Hand2 {}
+
+impl Ord for Hand2 {
+    fn cmp(&self, other: &Self) -> Ordering {
+        // First, compare by hand_type
+        let hand_type_order = self.hand_type.cmp(&other.hand_type);
+        if hand_type_order != Ordering::Equal {
+            return hand_type_order;
+        } else {
+            let zipped = self.cards.iter().zip(other.cards.iter());
+
+            for (this_card, other_card) in zipped {
+                let card_order = this_card.cmp(other_card);
+                if card_order == Ordering::Equal {
+                    continue;
+                } else {
+                    return this_card.cmp(other_card);
+                }
+            }
+
+            return Ordering::Equal;
+        }
+    }
+}
+
+impl PartialOrd for Hand2 {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+pub fn parse2(line: &str) -> Hand2 {
+    let mut splitted = line.split_whitespace();
+
+    let cards = splitted.next().expect("getting cards error");
+    let bid = splitted
+        .next()
+        .expect("getting bid error")
+        .parse::<AnswerDtype>()
+        .expect("parse bid error");
+
+    let value_cards = get_value_cards_alternative(cards);
+
+    let mut frequency_map = HashMap::new();
+
+    for &item in &value_cards {
+        let count = frequency_map.entry(item).or_insert(0);
+        *count += 1;
+    }
+
+    let mut freq_map: Vec<_> = frequency_map.into_iter().collect();
+    freq_map.sort_by_key(|&(_, count)| count);
+
+    println!("{:?}", freq_map);
+
+    let replace_val = freq_map
+        .iter()
+        .filter(|&x| x.0 != 1)
+        .map(|x| x.0)
+        .last()
+        .unwrap_or(1);
+
+    let mut cards_mod = value_cards;
+
+    for idx in 0..5 {
+        if cards_mod[idx] == 1 {
+            cards_mod[idx] = replace_val;
+        }
+    }
+
+    let hand_type = get_hand_type(cards_mod);
+
+    Hand2 {
+        cards: value_cards,
+        hand_type: hand_type,
         bid: bid,
     }
 }
@@ -182,7 +302,7 @@ QQQJA 483"#;
 pub const TEST_ANSWER_1: AnswerDtype = 6440;
 
 pub const TEST_DATA_2: &str = TEST_DATA_1;
-pub const TEST_ANSWER_2: AnswerDtype = 0;
+pub const TEST_ANSWER_2: AnswerDtype = 5905;
 
 #[cfg(test)]
 mod tests {
