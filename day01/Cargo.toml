@@ -13,8 +13,3 @@ regex = "1.10.2"
 # strum_macros = "0.24"
 # derive-new = "0.5.9"
 # num = "0.4.0"
-
-
-[profile.release]
-# lto="fat"
-# codegen-units=1

@@ -18,11 +18,5 @@ edition = "2021"
 # petgraph = "0.6.4"
 rayon = "1.8.0"
 
-
-
-[profile.release]
-# lto="fat"
-# codegen-units=1
-
 [lints]
 workspace = true
