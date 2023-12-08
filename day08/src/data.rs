@@ -1,18 +1,33 @@
 pub type AnswerDtype = i64;
 
 #[derive(Debug, Clone)]
-pub struct Node<'a> {
-    pub from: &'a str,
-    pub left: &'a str,
-    pub right: &'a str,
+pub struct Node {
+    pub from: String,
+    pub left: String,
+    pub right: String,
 }
 
-pub fn import_data(data: &str) -> (Vec<char>, Vec<Node>) {
+#[derive(Debug, Clone)]
+pub enum Direction {
+    L,
+    R,
+}
+
+pub fn import_data(data: &str) -> (Vec<Direction>, Vec<Node>) {
     let mut lines = data.lines();
-    
-    let instructions: Vec<_> = lines.next().expect("first line error").chars().collect();
+
+    let instructions: Vec<_> = lines
+        .next()
+        .expect("first line error")
+        .chars()
+        .map(|c| match c {
+            'L' => Direction::L,
+            'R' => Direction::R,
+            _ => panic!("invalid direction"),
+        })
+        .collect();
     _ = lines.next().expect("skip line");
-    
+
     let nodes = lines.map(|line| parse(line)).collect();
 
     (instructions, nodes)
@@ -20,14 +35,13 @@ pub fn import_data(data: &str) -> (Vec<char>, Vec<Node>) {
 
 pub fn parse(line: &str) -> Node {
     let mut parts = line.split(" = ");
-    let from = parts.next().expect("get from part error");
+    let from = parts.next().expect("get from part error").to_string();
     let mut to = parts.next().expect("get to part error").split(", ");
 
-    let left = &to.next().expect("get left part error")[1..];
-    let right = &to.next().expect("get right part error")[0..4];
+    let left = to.next().expect("get left part error")[1..].to_string();
+    let right = to.next().expect("get right part error")[0..3].to_string();
 
     Node { from, left, right }
-
 }
 
 pub const TEST_DATA_1_A: &str = r#"RL
