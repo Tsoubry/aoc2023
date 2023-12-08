@@ -1,6 +1,5 @@
 use day05::*;
 
-
 fn main() {
     let input_data = import_data(include_str!("../input.txt"));
 

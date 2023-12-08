@@ -20,7 +20,10 @@ fn split_into_numbers(input: &str) -> Vec<AnswerDtype> {
 pub fn import_data(data: &str) -> Parsed {
     let mut split_lines = data.split("\n\n").into_iter();
 
-    let seeds_str = split_lines.next().expect("seeds").trim_start_matches("seeds: ");
+    let seeds_str = split_lines
+        .next()
+        .expect("seeds")
+        .trim_start_matches("seeds: ");
 
     let seeds = split_into_numbers(seeds_str);
 
@@ -41,7 +44,6 @@ pub fn parse(line: &str) -> MapData {
     let destination_range_start = *split_white.get(0).expect("get range item");
     let source_range_start = *split_white.get(1).expect("get range item");
     let range_length = *split_white.get(2).expect("get range item");
-
 
     MapData {
         destination_range_start: destination_range_start,

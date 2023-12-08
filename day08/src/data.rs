@@ -1,4 +1,4 @@
-pub type AnswerDtype = i64;
+pub type AnswerDtype = u64;
 
 #[derive(Debug, Clone)]
 pub struct Node {
@@ -62,8 +62,17 @@ BBB = (AAA, ZZZ)
 ZZZ = (ZZZ, ZZZ)"#;
 pub const TEST_ANSWER_1_B: AnswerDtype = 6;
 
-// pub const TEST_DATA_2: &str = TEST_DATA_1;
-pub const TEST_ANSWER_2: AnswerDtype = 0;
+pub const TEST_DATA_2: &str = r#"LR
+
+11A = (11B, XXX)
+11B = (XXX, 11Z)
+11Z = (11B, XXX)
+22A = (22B, XXX)
+22B = (22C, 22C)
+22C = (22Z, 22Z)
+22Z = (22B, 22B)
+XXX = (XXX, XXX)"#;
+pub const TEST_ANSWER_2: AnswerDtype = 6;
 
 #[cfg(test)]
 mod tests {

@@ -40,10 +40,13 @@ pub fn answer_part1(data: Parsed) -> AnswerDtype {
 pub fn answer_part2(data: Parsed) -> AnswerDtype {
     let (seed_info, maps) = data;
 
-    let seed_pairs: Vec<_> = seed_info.chunks(2).map(|chunk| match chunk {
-        &[a, b] => (a, b),
-        _ => panic!("error chunks"),
-    }).collect();
+    let seed_pairs: Vec<_> = seed_info
+        .chunks(2)
+        .map(|chunk| match chunk {
+            &[a, b] => (a, b),
+            _ => panic!("error chunks"),
+        })
+        .collect();
 
     seed_pairs
         .into_par_iter()
