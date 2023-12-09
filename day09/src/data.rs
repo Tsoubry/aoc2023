@@ -7,7 +7,9 @@ pub fn import_data(data: &str) -> Vec<Parsed> {
 }
 
 pub fn parse(line: &str) -> Parsed {
-    line.split_whitespace().map(|x| x.parse().expect("failed parsing number to i64")).collect()
+    line.split_whitespace()
+        .map(|x| x.parse().expect("failed parsing number to i64"))
+        .collect()
 }
 
 pub const TEST_DATA_1: &str = r#"0 3 6 9 12 15
@@ -16,7 +18,7 @@ pub const TEST_DATA_1: &str = r#"0 3 6 9 12 15
 pub const TEST_ANSWER_1: AnswerDtype = 114;
 
 pub const TEST_DATA_2: &str = TEST_DATA_1;
-pub const TEST_ANSWER_2: AnswerDtype = 0;
+pub const TEST_ANSWER_2: AnswerDtype = 2;
 
 #[cfg(test)]
 mod tests {
