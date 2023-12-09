@@ -30,6 +30,7 @@ dependencies = [
  "day01",
  "day02",
  "day03",
+ "day09",
  "divan",
  "no-std-day01",
  "no-std-day02",
