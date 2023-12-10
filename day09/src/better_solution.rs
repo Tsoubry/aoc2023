@@ -21,7 +21,9 @@ fn diffs(seq: &Seq) -> Seq {
 }
 
 fn parse(line: &str) -> Seq {
-    line.split_whitespace().map(|tok| tok.parse::<i64>().unwrap()).collect()
+    line.split_whitespace()
+        .map(|tok| tok.parse::<i64>().unwrap())
+        .collect()
 }
 
 pub fn part1(input: &str) -> i64 {

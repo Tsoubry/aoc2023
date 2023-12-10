@@ -22,11 +22,17 @@ impl<T: Default + Copy, const N: usize> StaticVec<T, N> {
     }
 
     pub fn empty() -> Self {
-        Self { data: [T::default(); N], len: 0 }
+        Self {
+            data: [T::default(); N],
+            len: 0,
+        }
     }
 
     pub fn of(t: T) -> Self {
-        Self { data: [t; N], len: N }
+        Self {
+            data: [t; N],
+            len: N,
+        }
     }
 
     pub fn iter(&self) -> impl Iterator<Item = &T> {
@@ -37,11 +43,7 @@ impl<T: Default + Copy, const N: usize> StaticVec<T, N> {
         self.data[..self.len].sort_by(cmp);
     }
 
-    pub fn binary_search_by_key<K: Ord>(
-        &self,
-        t: &K,
-        f: impl Fn(&T) -> K,
-    ) -> Option<usize> {
+    pub fn binary_search_by_key<K: Ord>(&self, t: &K, f: impl Fn(&T) -> K) -> Option<usize> {
         self.data[..self.len].binary_search_by_key(t, f).ok()
     }
 }

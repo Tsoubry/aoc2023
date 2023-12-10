@@ -1,5 +1,5 @@
-pub mod data;
 pub mod better_solution;
+pub mod data;
 pub mod static_vec;
 
 pub use crate::data::*;
