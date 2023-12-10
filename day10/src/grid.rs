@@ -44,7 +44,15 @@ impl fmt::Debug for Pipe {
     }
 }
 
-#[derive(Debug)]
+#[derive(Copy, Clone)]
+pub enum Direction {
+    Up,
+    Down,
+    Left,
+    Right,
+}
+
+#[derive(Debug, Clone)]
 pub struct Grid<const X: usize, const Y: usize> {
     pub grid: [[Pipe; X]; Y],
 }
@@ -66,5 +74,161 @@ impl<const X: usize, const Y: usize> Grid<X, Y> {
         });
 
         grid
+    }
+
+    pub fn find_start(&self) -> (usize, usize) {
+        for y in 0..Y {
+            for x in 0..X {
+                if self.grid[y][x] == Pipe::S {
+                    return (y, x);
+                }
+            }
+        }
+
+        return (0, 0); // shouldn't be possible
+    }
+
+    pub fn find_up(&self, y: usize, x: usize) -> Option<(usize, usize, Direction)> {
+        let new_y = std::cmp::min(y + 1, Y);
+        if [Pipe::F, Pipe::V, Pipe::W].contains(&self.grid[new_y][x]) {
+            Some((new_y, x, Direction::Up))
+        } else {
+            None
+        }
+    }
+
+    pub fn find_down(&self, y: usize, x: usize) -> Option<(usize, usize, Direction)> {
+        if let Some(new_y) = y.checked_sub(1) {
+            if [Pipe::J, Pipe::V, Pipe::L].contains(&self.grid[new_y][x]) {
+                Some((new_y, x, Direction::Down))
+            } else {
+                None
+            }
+        } else {
+            None
+        }
+    }
+
+    pub fn find_right(&self, y: usize, x: usize) -> Option<(usize, usize, Direction)> {
+        let new_x = std::cmp::min(x + 1, X);
+        if [Pipe::F, Pipe::H, Pipe::J].contains(&self.grid[y][new_x]) {
+            Some((y, new_x, Direction::Right))
+        } else {
+            None
+        }
+    }
+
+    pub fn find_left(&self, y: usize, x: usize) -> Option<(usize, usize, Direction)> {
+        if let Some(new_x) = x.checked_sub(1) {
+            if [Pipe::W, Pipe::H, Pipe::L].contains(&self.grid[y][new_x]) {
+                Some((y, new_x, Direction::Left))
+            } else {
+                None
+            }
+        } else {
+            None
+        }
+    }
+
+    pub fn find_pipes(&self, y: usize, x: usize) -> Vec<(usize, usize, Direction)> {
+        let mut pipes = vec![];
+
+        // Up
+        if let Some(pipe) = self.find_up(y, x) {
+            pipes.push(pipe);
+        }
+
+        // Down
+        if let Some(pipe) = self.find_down(y, x) {
+            pipes.push(pipe);
+        }
+
+        // Left
+        if let Some(pipe) = self.find_left(y, x) {
+            pipes.push(pipe);
+        }
+
+        // Right
+        if let Some(pipe) = self.find_right(y, x) {
+            pipes.push(pipe);
+        }
+
+        pipes
+    }
+
+    pub fn next_pipe(
+        &self,
+        y: usize,
+        x: usize,
+        from_dir: Direction,
+    ) -> Option<(usize, usize, Pipe, Direction)> {
+        match from_dir {
+            Direction::Up => {
+                if let Some(pipe) = self.find_up(y, x) {
+                    let new_pipe = self.grid[pipe.0][pipe.1];
+                    return Some((pipe.0, pipe.1, new_pipe, pipe.2));
+                }
+
+                if let Some(pipe) = self.find_left(y, x) {
+                    let new_pipe = self.grid[pipe.0][pipe.1];
+                    return Some((pipe.0, pipe.1, new_pipe, pipe.2));
+                }
+
+                if let Some(pipe) = self.find_right(y, x) {
+                    let new_pipe = self.grid[pipe.0][pipe.1];
+                    return Some((pipe.0, pipe.1, new_pipe, pipe.2));
+                }
+            }
+            Direction::Down => {
+                if let Some(pipe) = self.find_down(y, x) {
+                    let new_pipe = self.grid[pipe.0][pipe.1];
+                    return Some((pipe.0, pipe.1, new_pipe, pipe.2));
+                }
+
+                if let Some(pipe) = self.find_left(y, x) {
+                    let new_pipe = self.grid[pipe.0][pipe.1];
+                    return Some((pipe.0, pipe.1, new_pipe, pipe.2));
+                }
+
+                if let Some(pipe) = self.find_right(y, x) {
+                    let new_pipe = self.grid[pipe.0][pipe.1];
+                    return Some((pipe.0, pipe.1, new_pipe, pipe.2));
+                }
+            }
+            Direction::Left => {
+                if let Some(pipe) = self.find_down(y, x) {
+                    let new_pipe = self.grid[pipe.0][pipe.1];
+                    return Some((pipe.0, pipe.1, new_pipe, pipe.2));
+                }
+
+                if let Some(pipe) = self.find_left(y, x) {
+                    let new_pipe = self.grid[pipe.0][pipe.1];
+                    return Some((pipe.0, pipe.1, new_pipe, pipe.2));
+                }
+
+                if let Some(pipe) = self.find_up(y, x) {
+                    let new_pipe = self.grid[pipe.0][pipe.1];
+                    return Some((pipe.0, pipe.1, new_pipe, pipe.2));
+                }
+            }
+            Direction::Right => {
+                if let Some(pipe) = self.find_down(y, x) {
+                    let new_pipe = self.grid[pipe.0][pipe.1];
+                    return Some((pipe.0, pipe.1, new_pipe, pipe.2));
+                }
+
+                if let Some(pipe) = self.find_right(y, x) {
+                    let new_pipe = self.grid[pipe.0][pipe.1];
+                    return Some((pipe.0, pipe.1, new_pipe, pipe.2));
+                }
+
+                if let Some(pipe) = self.find_up(y, x) {
+                    let new_pipe = self.grid[pipe.0][pipe.1];
+                    return Some((pipe.0, pipe.1, new_pipe, pipe.2));
+                }
+            }
+        }
+
+        None
     }
 }
