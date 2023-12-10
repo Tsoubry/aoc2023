@@ -44,7 +44,7 @@ impl fmt::Debug for Pipe {
     }
 }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Eq, PartialEq)]
 pub enum Direction {
     Up,
     Down,
@@ -162,73 +162,90 @@ impl<const X: usize, const Y: usize> Grid<X, Y> {
         x: usize,
         from_dir: Direction,
     ) -> Option<(usize, usize, Pipe, Direction)> {
-        match from_dir {
-            Direction::Up => {
-                if let Some(pipe) = self.find_up(y, x) {
-                    let new_pipe = self.grid[pipe.0][pipe.1];
-                    return Some((pipe.0, pipe.1, new_pipe, pipe.2));
-                }
 
-                if let Some(pipe) = self.find_left(y, x) {
-                    let new_pipe = self.grid[pipe.0][pipe.1];
-                    return Some((pipe.0, pipe.1, new_pipe, pipe.2));
-                }
+        let current_pipe = self.grid[y][x];
 
-                if let Some(pipe) = self.find_right(y, x) {
-                    let new_pipe = self.grid[pipe.0][pipe.1];
-                    return Some((pipe.0, pipe.1, new_pipe, pipe.2));
+        match current_pipe {
+            Pipe::V => {
+                if Direction::Up == from_dir {
+                    if let Some(pipe) = self.find_up(y, x) {
+                        let new_pipe = self.grid[pipe.0][pipe.1];
+                        return Some((pipe.0, pipe.1, new_pipe, pipe.2));
+                    }};
+                if Direction::Down == from_dir {
+                    if let Some(pipe) = self.find_down(y, x) {
+                        let new_pipe = self.grid[pipe.0][pipe.1];
+                        return Some((pipe.0, pipe.1, new_pipe, pipe.2));
+                    }
                 }
-            }
-            Direction::Down => {
-                if let Some(pipe) = self.find_down(y, x) {
-                    let new_pipe = self.grid[pipe.0][pipe.1];
-                    return Some((pipe.0, pipe.1, new_pipe, pipe.2));
+            },
+            Pipe::H => {
+                if Direction::Left == from_dir {
+                    if let Some(pipe) = self.find_left(y, x) {
+                        let new_pipe = self.grid[pipe.0][pipe.1];
+                        return Some((pipe.0, pipe.1, new_pipe, pipe.2));
+                    }};
+                if Direction::Right == from_dir {
+                    if let Some(pipe) = self.find_right(y, x) {
+                        let new_pipe = self.grid[pipe.0][pipe.1];
+                        return Some((pipe.0, pipe.1, new_pipe, pipe.2));
+                    }
                 }
-
-                if let Some(pipe) = self.find_left(y, x) {
-                    let new_pipe = self.grid[pipe.0][pipe.1];
-                    return Some((pipe.0, pipe.1, new_pipe, pipe.2));
+            },
+            Pipe::F => {
+                if Direction::Left == from_dir {
+                    if let Some(pipe) = self.find_down(y, x) {
+                        let new_pipe = self.grid[pipe.0][pipe.1];
+                        return Some((pipe.0, pipe.1, new_pipe, pipe.2));
+                    }};
+                if Direction::Up == from_dir {
+                    if let Some(pipe) = self.find_right(y, x) {
+                        let new_pipe = self.grid[pipe.0][pipe.1];
+                        return Some((pipe.0, pipe.1, new_pipe, pipe.2));
+                    }
                 }
-
-                if let Some(pipe) = self.find_right(y, x) {
-                    let new_pipe = self.grid[pipe.0][pipe.1];
-                    return Some((pipe.0, pipe.1, new_pipe, pipe.2));
+            },
+            Pipe::W => {
+                if Direction::Right == from_dir {
+                    if let Some(pipe) = self.find_down(y, x) {
+                        let new_pipe = self.grid[pipe.0][pipe.1];
+                        return Some((pipe.0, pipe.1, new_pipe, pipe.2));
+                    }};
+                if Direction::Up == from_dir {
+                    if let Some(pipe) = self.find_left(y, x) {
+                        let new_pipe = self.grid[pipe.0][pipe.1];
+                        return Some((pipe.0, pipe.1, new_pipe, pipe.2));
+                    }
                 }
-            }
-            Direction::Left => {
-                if let Some(pipe) = self.find_down(y, x) {
-                    let new_pipe = self.grid[pipe.0][pipe.1];
-                    return Some((pipe.0, pipe.1, new_pipe, pipe.2));
+            },
+            Pipe::L => {
+                if Direction::Left == from_dir {
+                    if let Some(pipe) = self.find_up(y, x) {
+                        let new_pipe = self.grid[pipe.0][pipe.1];
+                        return Some((pipe.0, pipe.1, new_pipe, pipe.2));
+                    }};
+                if Direction::Down == from_dir {
+                    if let Some(pipe) = self.find_right(y, x) {
+                        let new_pipe = self.grid[pipe.0][pipe.1];
+                        return Some((pipe.0, pipe.1, new_pipe, pipe.2));
+                    }
                 }
-
-                if let Some(pipe) = self.find_left(y, x) {
-                    let new_pipe = self.grid[pipe.0][pipe.1];
-                    return Some((pipe.0, pipe.1, new_pipe, pipe.2));
+            },
+            Pipe::J => {
+                if Direction::Right == from_dir {
+                    if let Some(pipe) = self.find_up(y, x) {
+                        let new_pipe = self.grid[pipe.0][pipe.1];
+                        return Some((pipe.0, pipe.1, new_pipe, pipe.2));
+                    }};
+                if Direction::Down == from_dir {
+                    if let Some(pipe) = self.find_left(y, x) {
+                        let new_pipe = self.grid[pipe.0][pipe.1];
+                        return Some((pipe.0, pipe.1, new_pipe, pipe.2));
+                    }
                 }
-
-                if let Some(pipe) = self.find_up(y, x) {
-                    let new_pipe = self.grid[pipe.0][pipe.1];
-                    return Some((pipe.0, pipe.1, new_pipe, pipe.2));
-                }
-            }
-            Direction::Right => {
-                if let Some(pipe) = self.find_down(y, x) {
-                    let new_pipe = self.grid[pipe.0][pipe.1];
-                    return Some((pipe.0, pipe.1, new_pipe, pipe.2));
-                }
-
-                if let Some(pipe) = self.find_right(y, x) {
-                    let new_pipe = self.grid[pipe.0][pipe.1];
-                    return Some((pipe.0, pipe.1, new_pipe, pipe.2));
-                }
-
-                if let Some(pipe) = self.find_up(y, x) {
-                    let new_pipe = self.grid[pipe.0][pipe.1];
-                    return Some((pipe.0, pipe.1, new_pipe, pipe.2));
-                }
-            }
+            },
+            _ => { return None },
         }
-
         None
     }
 }

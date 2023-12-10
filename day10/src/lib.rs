@@ -21,11 +21,13 @@ pub fn answer_part1<const X: usize, const Y: usize>(grid: Grid<X, Y>) -> AnswerD
                 y = next_pipe.0;
                 x = next_pipe.1;
                 dir = next_pipe.3;
+                println!("pipe {:?}", &next_pipe.2);
                 if next_pipe.2 == Pipe::S {
                     return steps / 2;
                 }
             } else {
                 println!("break");
+                
                 break;
             }
         }
